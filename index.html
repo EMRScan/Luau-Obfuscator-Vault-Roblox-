@@ -1,0 +1,182 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Luau Obfuscator Vault</title>
+    <meta name="description" content="Local Luau obfuscation for Roblox Studio scripts. Runs fully in your browser." />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg" aria-hidden="true">
+      <div class="bg__grain"></div>
+      <div class="bg__orb bg__orb--a"></div>
+      <div class="bg__orb bg__orb--b"></div>
+    </div>
+
+    <main class="wrap">
+      <header class="hero">
+        <div class="hero__mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" role="img" focusable="false">
+            <path
+              d="M32 6c14.36 0 26 11.64 26 26S46.36 58 32 58 6 46.36 6 32 17.64 6 32 6Z"
+              fill="currentColor"
+              opacity="0.12"
+            />
+            <path
+              d="M20 28c0-6.627 5.373-12 12-12s12 5.373 12 12c0 2.88-1.02 5.52-2.72 7.58l3.12 3.12a2 2 0 0 1-2.83 2.83l-3.12-3.12A11.95 11.95 0 0 1 32 40c-6.627 0-12-5.373-12-12Zm6 0a6 6 0 1 0 12 0 6 6 0 0 0-12 0Z"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+        <div class="hero__copy">
+          <h1>Luau Obfuscator Vault</h1>
+          <p>
+            Paste a Roblox Studio script and get runnable obfuscated Luau (minified + local renaming).
+            A vault key is generated so you can retrieve your original later from this browser.
+          </p>
+        </div>
+      </header>
+
+      <section class="card" aria-label="Tool">
+        <div class="seg" role="tablist" aria-label="Mode">
+          <button class="seg__btn is-active" type="button" role="tab" aria-selected="true" data-tab="obf">
+            Obfuscate
+          </button>
+          <button class="seg__btn" type="button" role="tab" aria-selected="false" data-tab="restore">
+            Restore
+          </button>
+          <div class="seg__hint">
+            <span class="dot" aria-hidden="true"></span>
+            No upload. No server.
+          </div>
+        </div>
+
+        <div class="panel is-active" id="panel-obf" role="tabpanel" aria-label="Obfuscate">
+          <div class="grid">
+            <div class="field">
+              <div class="field__top">
+                <label for="obf-input">Script (Luau / Lua)</label>
+                <button class="mini" type="button" data-action="fill-example">Insert example</button>
+              </div>
+              <textarea
+                id="obf-input"
+                class="textbox"
+                spellcheck="false"
+                placeholder="Paste your script here..."
+              ></textarea>
+              <div class="field__hint">
+                Output is runnable Luau. The key is only for restoring your original in this browser (local vault).
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="field__top">
+                <label for="obf-output">Obfuscated Output (runnable)</label>
+                <div class="field__actions">
+                  <button class="mini" type="button" data-copy="obf-output">Copy</button>
+                  <button class="mini" type="button" data-action="download-obf">Download</button>
+                </div>
+              </div>
+              <textarea
+                id="obf-output"
+                class="textbox textbox--mono"
+                spellcheck="false"
+                placeholder="Your obfuscated Luau code will appear here..."
+                readonly
+              ></textarea>
+              <div class="keyrow">
+                <div class="keyrow__left">
+                  <label class="keyrow__label" for="obf-key">Vault Key (restore original)</label>
+                  <input
+                    id="obf-key"
+                    class="keyrow__key"
+                    inputmode="text"
+                    autocomplete="off"
+                    spellcheck="false"
+                    placeholder="Generated after obfuscation"
+                    readonly
+                  />
+                </div>
+                <div class="keyrow__right">
+                  <button class="btn btn--accent" type="button" data-action="obfuscate">
+                    <span class="btn__label">Obfuscate</span>
+                    <span class="btn__sub">Generate code + key</span>
+                  </button>
+                  <button class="btn" type="button" data-action="clear-obf">Clear</button>
+                  <button class="mini" type="button" data-copy="obf-key">Copy key</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" id="panel-restore" role="tabpanel" aria-label="Restore">
+          <div class="grid">
+            <div class="field">
+              <div class="field__top">
+                <label for="restore-key">Vault Key</label>
+              </div>
+              <input
+                id="restore-key"
+                class="textbox textbox--mono"
+                inputmode="text"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="Paste key here..."
+              />
+              <div class="row">
+                <button class="btn btn--accent" type="button" data-action="restore">
+                  <span class="btn__label">Restore Original</span>
+                  <span class="btn__sub">Retrieve from local vault</span>
+                </button>
+                <button class="btn" type="button" data-action="clear-restore">Clear</button>
+              </div>
+              <div class="field__hint">If you clear browser storage, keys can no longer restore scripts.</div>
+            </div>
+
+            <div class="field">
+              <div class="field__top">
+                <label for="restore-output">Original Script</label>
+                <div class="field__actions">
+                  <button class="mini" type="button" data-copy="restore-output">Copy</button>
+                  <button class="mini" type="button" data-action="download-plain">Download</button>
+                </div>
+              </div>
+              <textarea
+                id="restore-output"
+                class="textbox"
+                spellcheck="false"
+                placeholder="Your original script will appear here after restore..."
+                readonly
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <footer class="foot">
+          <div class="foot__left">
+            <span class="pill">Tip</span>
+            Paste the obfuscated output directly into Roblox Studio. Use the key to restore your original later.
+          </div>
+          <div class="foot__right">
+            <a class="link" href="#" data-action="swap-to-restore">I have a key</a>
+          </div>
+        </footer>
+      </section>
+
+      <section class="note" aria-label="Notes">
+        <div class="note__box">
+          <h2>Important</h2>
+          <ul>
+            <li>This is for protecting your own scripts. Don't use it to hide malicious code.</li>
+            <li>Obfuscation is best-effort. Always test the output in Studio before shipping.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
